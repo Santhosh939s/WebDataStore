@@ -1,0 +1,12 @@
+{
+  "santhosh": {
+    "ip": "192.168.1.150",
+    "password": "SuperSecret123",
+    "updatedAt": "2026-10-12T08:01:48.220Z"
+  },
+  "jaya": {
+    "ip": "10.0.0.88",
+    "password": "JayaPass!2026",
+    "updatedAt": "2026-10-12T08:01:48.220Z"
+  }
+}

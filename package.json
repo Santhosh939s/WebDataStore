@@ -1,0 +1,13 @@
+{
+  "name": "web-data-store",
+  "version": "1.0.0",
+  "description": "Zero-database cross-device auto-saving IP and password vault for Santhosh and Jaya",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["cross-device", "auto-save", "vault", "no-database"],
+  "author": "",
+  "license": "MIT"
+}
