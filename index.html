@@ -651,7 +651,7 @@
               <span>Profile Vault #1</span>
             </div>
           </div>
-          <div class="last-edited" id="lastEditedSanthosh">Synced</div>
+          <div class="last-edited" id="lastEditedSanthosh">Blank</div>
         </div>
 
         <!-- IP Address Field -->
@@ -737,7 +737,7 @@
               <span>Profile Vault #2</span>
             </div>
           </div>
-          <div class="last-edited" id="lastEditedJaya">Synced</div>
+          <div class="last-edited" id="lastEditedJaya">Blank</div>
         </div>
 
         <!-- IP Address Field -->
@@ -1079,7 +1079,7 @@
       const el = document.getElementById(`lastEdited${profile.charAt(0).toUpperCase() + profile.slice(1)}`);
       if (!el) return;
       if (!isoDate) {
-        el.textContent = 'Ready';
+        el.textContent = 'Blank';
         return;
       }
       const d = new Date(isoDate);
