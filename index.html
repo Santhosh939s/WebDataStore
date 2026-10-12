@@ -678,6 +678,9 @@
               autocomplete="off"
               spellcheck="false"
               oninput="handleInput('santhosh')"
+              onchange="handleImmediateInput('santhosh')"
+              onblur="handleImmediateInput('santhosh')"
+              onpaste="handleImmediateInput('santhosh')"
             />
             <button class="input-btn" onclick="copyValue('santhosh_ip', 'IP Address')" title="Copy IP">
               <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
@@ -707,6 +710,9 @@
               autocomplete="off"
               spellcheck="false"
               oninput="handleInput('santhosh')"
+              onchange="handleImmediateInput('santhosh')"
+              onblur="handleImmediateInput('santhosh')"
+              onpaste="handleImmediateInput('santhosh')"
             />
             <button class="input-btn" onclick="togglePasswordVisibility('santhosh_password', this)" title="Show/Hide Password">
               <svg viewBox="0 0 24 24" class="eye-icon">
@@ -764,6 +770,9 @@
               autocomplete="off"
               spellcheck="false"
               oninput="handleInput('jaya')"
+              onchange="handleImmediateInput('jaya')"
+              onblur="handleImmediateInput('jaya')"
+              onpaste="handleImmediateInput('jaya')"
             />
             <button class="input-btn" onclick="copyValue('jaya_ip', 'IP Address')" title="Copy IP">
               <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
@@ -793,6 +802,9 @@
               autocomplete="off"
               spellcheck="false"
               oninput="handleInput('jaya')"
+              onchange="handleImmediateInput('jaya')"
+              onblur="handleImmediateInput('jaya')"
+              onpaste="handleImmediateInput('jaya')"
             />
             <button class="input-btn" onclick="togglePasswordVisibility('jaya_password', this)" title="Show/Hide Password">
               <svg viewBox="0 0 24 24" class="eye-icon">
@@ -1040,13 +1052,23 @@
       }
     }
 
-    // Debounced input handler (saves automatically 350ms after user pauses)
+    // Debounced input handler (200ms for snappier mobile & desktop response)
     function handleInput(profile) {
       setSaveFeedback(profile, 'saving', 'Auto-saving...');
       clearTimeout(saveTimeout);
       saveTimeout = setTimeout(() => {
         pushData(profile);
-      }, 350);
+      }, 200);
+    }
+
+    // Instant save handler for paste, blur, or selection change
+    function handleImmediateInput(profile) {
+      clearTimeout(saveTimeout);
+      setSaveFeedback(profile, 'saving', 'Saving...');
+      // 25ms delay ensures mobile paste clipboard content is fully in value
+      setTimeout(() => {
+        pushData(profile);
+      }, 25);
     }
 
     // ==========================================
@@ -1129,8 +1151,8 @@
           const input = document.getElementById(inputId);
           input.value = text;
           const profile = inputId.startsWith('santhosh') ? 'santhosh' : 'jaya';
-          handleInput(profile);
-          showToast(`Pasted and auto-saving...`);
+          handleImmediateInput(profile);
+          showToast(`Pasted and saved!`);
         }
       } catch (err) {
         showToast('Please press Ctrl+V inside the field');
@@ -1173,9 +1195,18 @@
       await checkBackend();
       await fetchData();
 
-      // Background real-time polling every 3.5 seconds
-      // Automatically updates if friend edits on another laptop
-      pollInterval = setInterval(fetchData, 3500);
+      // Faster real-time polling (every 2.0s) so changes reflect almost instantly
+      pollInterval = setInterval(fetchData, 2000);
+
+      // Instant refresh when unlocking phone or switching back to the tab
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          fetchData();
+        }
+      });
+      window.addEventListener('focus', () => {
+        fetchData();
+      });
 
       document.getElementById('refreshBtn').addEventListener('click', () => {
         fetchData();
